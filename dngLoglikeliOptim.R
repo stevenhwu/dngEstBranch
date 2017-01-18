@@ -36,19 +36,17 @@ invLogit<- function(p){
   return( ep/(1+ep))
 }
 
-callDngLikeli<- function(transformBranch){
-  #branch <- invLogit(transformBranch)
-  branch <- log(transformBranch)
-  #branch <- exp(transformBranch)
-  #branch <- transformBranch
-  if(any(branch > 1e400 |  branch < 1e-30 | is.na(branch))){
-    print(transformBranch)
-    return(-Inf)
-  }
+callDngLikeli<- function(params){
+  mu <- invLogit(params)
 
-  pedigree<-paste0(prefix, branch[1], ",", name[2], ":", branch[2],"):0\"")
-  system2("echo", c(pedigree, " > ", pedFile))
-
+  # if(any(branch > 1e400 |  branch < 1e-30 | is.na(branch))){
+  #   print(transformBranch)
+  #   return(-Inf)
+  # }
+  # branch<- c(1,1)
+  # pedigree<-paste0(prefix, branch[1], ",", name[2], ":", branch[2],"):0\"")
+  # system2("echo", c(pedigree, " > ", pedFile))
+  dngOtherArgs <- paste0("-t 20 --mu-somatic ", mu)
   args<- c("-p", pedFile, tadFile, dngOtherArgs, commandGetHidden)
   stdout<- system2(dngLoglike, args=args, stdout=T)
   ll <- as.numeric(stdout)
@@ -128,4 +126,26 @@ for(i in 1:4){
 baseLikeliAll
 baseLikeli<- min(baseLikeliAll)
 
-baseLikeli
+########################################
+pedigree[5]<-paste0(prefix, 1, ",", name[2], ":", 1,"):0\"")
+system2("echo", c(pedigree[5], " > ", pedFile))
+args<- c("-p", pedFile, tadFile, dngOtherArgs, commandGetHidden)
+stdout<- system2(dngLoglike, args=args, stdout=T)
+
+
+baseLikeli <- as.numeric(stdout)
+
+
+
+mu_t<- rnorm(1)
+result<- optim(mu_t, callDngLikeliRelative,
+  baseLikeli=baseLikeli,
+  control=list(fnscale=-1
+  # ,reltol=1e-12
+  ,maxit=100
+));
+result
+invLogit(result$par)
+
+r2<- optimize(callDngLikeliRelative, c(-100,100), maximum=T, baseLikeli=baseLikeli)
+invLogit(r2$maximum)
