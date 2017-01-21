@@ -1,5 +1,5 @@
-in_name = "zTest.tad"
-out_name = "zTestMerged.tad"
+in_name = "bwa_2.tad"
+out_name = "bwa_merged.tad"
 
 
 with open(in_name, "r") as infile,  open(out_name, "w") as outfile:
@@ -23,5 +23,4 @@ with open(in_name, "r") as infile,  open(out_name, "w") as outfile:
                 total = ",".join(map(str,each_total))
                 
             new_line = "\t".join(split[0:3]) + "\t" + total + "\n"
-            print new_line
             outfile.write(new_line)
