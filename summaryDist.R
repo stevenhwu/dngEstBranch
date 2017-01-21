@@ -1,5 +1,7 @@
 files<- system2("find"," . -name *RData", T)
-for(i in 1:length(files)){ load(files[i])}
+for(i in 1:length(files)){
+  load(files[i])
+}
 
 
 allDist<- matrix(0,nrow=8,ncol=8)
@@ -23,5 +25,30 @@ for(i in 1:length(MOthers)){
 }
 
 allDist<- allDist + (t(allDist))
+
+as.dist(allDist)
+
+
+#######################33
+
+
+files<- system2("find"," . -name optimDngSomLib*RData", T)
+for(i in 1:length(files)){
+  load(files[i])
+}
+
+muSom<- matrix(0,nrow=8,ncol=8)
+muLib<- matrix(0,nrow=8,ncol=8)
+MAll <- ls()[grep("M[1-8]_M",ls())]
+for(i in 1:length(MAll)){
+  print(get(MAll[i])$mu_somatic)
+  index<- strsplit(sub("M(.)_M(.)_.*", "\\1 \\2", MAll[i]), " ")[[1]]
+  index<- as.numeric(index)
+  muSom[index[1], index[2]]<- get(MAll[i])$mu_somatic
+  muLib[index[1], index[2]]<- get(MAll[i])$mu_library
+}
+
+muSom<- muSom + (t(muSom))
+muLib<- muLib + (t(muLib))
 
 as.dist(allDist)
