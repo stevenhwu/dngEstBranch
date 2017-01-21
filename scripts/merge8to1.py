@@ -11,7 +11,7 @@ with open(in_name, "r") as infile,  open(out_name, "w") as outfile:
             if(len(split)!=27):
                 print "ERROR!!:", line, split
                 
-            
+                
             if len(split[2])==1:
                 counts = map(int, split[3:])
                 total = str(sum(counts))
@@ -21,7 +21,7 @@ with open(in_name, "r") as infile,  open(out_name, "w") as outfile:
                 for i in counts:
                     each_total =  [x+y for x,y in zip(each_total, i)]
                 total = ",".join(map(str,each_total))
-            
-            labels = split[0:3]
-            new_line = "\t".join(labels) + "\n"
+                
+            new_line = "\t".join(split[0:3]) + "\t" + total + "\n"
+            print new_line
             outfile.write(new_line)
