@@ -39,7 +39,7 @@ commandGetTotal <- " | tail -n 1 |  awk '{print $1}'"
 commandGetHidden <- " | tail -n 1 |  awk '{print $2}'"
 # log_likelihood	log_hidden	log_observed
 
-args[2]<- match.arg(args[2], 1:8)
+args[2]<- match.arg(args[2], 0:8)
 # args[3]<- match.arg(args[3], 1:8)
 
 tadFile <- args[1]
