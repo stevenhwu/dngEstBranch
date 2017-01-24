@@ -86,3 +86,28 @@ for(i in 1:8){
 [7] 0.0025842928070098792 0.0022734730783888516
 > mean(muLibOnly)
 [1] 0.0020300474329854423
+
+
+
+#####################################
+
+
+files<- system2("find"," . -name optimDngSomFixLib*RData", T)
+for(i in 1:length(files)){
+  load(files[i])
+}
+
+allSomFixLib<- matrix(0,nrow=8,ncol=8)
+MAll <- ls()[grep("M[1-8]_M[1-8]",ls())]
+for(i in 1:length(MAll)){
+  
+  index<- strsplit(sub("M(.)_M(.)_.*", "\\1 \\2", MAll[i]), " ")[[1]]
+  index<- as.numeric(index)
+  allSomFixLib[index[1], index[2]]<- get(MAll[i])$mu_somatic
+  # muLib[index[1], index[2]]<- get(MAll[i])$mu_library
+  
+  
+}
+
+
+allSomFixLib<- allSomFixLib + (t(allSomFixLib))
