@@ -10,7 +10,7 @@ invLogit<- function(p){
 callDngLikeli<- function(params, argFile){
   som <- invLogit(params)
 
-  dngOtherArgs <- paste("-t 10 --mu-somatic ", som, " --arg-file ", argFile)
+  dngOtherArgs <- paste("-t 1 --mu-somatic ", som, " --arg-file ", argFile)
   # --mu-library 0.0020300474329854423")
   # --nuc-freqs=0.25,0.25,0.25,0.25")
   args<- c("-p", pedFile, tadFile, dngOtherArgs, commandGetHidden)
@@ -35,7 +35,7 @@ if(length(args)!=4){
 argFile <- args[4]
 
 dngLoglike <- "dng-loglike"
-dngOtherArgs <- paste0("-t 10 --arg-file ", argFile) # --mu-library 0.0020300474329854423"
+dngOtherArgs <- paste0("-t 1 --arg-file ", argFile) # --mu-library 0.0020300474329854423"
 commandGetTotal <- " | tail -n 1 |  awk '{print $1}'"
 commandGetHidden <- " | tail -n 1 |  awk '{print $2}'"
 # log_likelihood	log_hidden	log_observed
@@ -72,7 +72,7 @@ output<- list(mu_somatic=mu["somatic"], log_hidden=log_hidden,
 print(output)
 
 result_id<- paste0(paste0(name,collapse="_"), "_", pid)
-outfile <- paste0("optimDngCustomSom_", result_id, ".RData" )
+outfile <- paste0("optimDngCustomSomFixLib_", result_id, ".RData" )
 
 assign(result_id, output)
 save(list=c("result_id", result_id), file=outfile)
